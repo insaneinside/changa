@@ -866,9 +866,7 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-cuda[=PATH]
-                          Use CUDA (installed in PATH)
-                          [unspecified=auto]
+  --with-cuda[=PATH] Use CUDA (installed in PATH) [auto]
 
 Some influential environment variables:
   CHARMC      "Charm compiler"
@@ -5377,6 +5375,7 @@ fi
 done
 
 
+####################### CUDA #######################
 # ----------------------------------------------------------------
 # CUDA support
 #
@@ -5394,7 +5393,13 @@ done
 # There are some arguments to AC_MSG_* with ugly formatting here; the formatting
 # is intentional (it produces nice, readable output in the generated `configure`
 # script).
+#
+# To disable automatic use of CUDA, change the assigned value of `ENABLE_CUDA`
+# in the line directly below this comment to "no".  (You should also change the
+# default-argument value in the docstring passed to `AS_HELP_STRING` to match.)
 ENABLE_CUDA="auto"
+
+
 
 
 # Check whether --with-cuda or --without-cuda was given.
@@ -5406,7 +5411,8 @@ else
 fi;
 
 # Interpret "--with-cuda" (i.e. no argument) as "enable CUDA support, please."
-if test "$CUDA_DIR" = "yes"; then
+# We also support using the argument "auto" for this purpose.
+if test "$CUDA_DIR" = "yes" || test "$CUDA_DIR" = "auto"; then
     ENABLE_CUDA="yes"
     CUDA_DIR=""
 fi
@@ -5426,8 +5432,8 @@ echo $ECHO_N "checking for CUDA toolkit directory... $ECHO_C" >&6
         done
         if test -z "$CUDA_DIR"; then
             if test "$ENABLE_CUDA" = "yes"; then
-                # User explicitly requested CUDA support; being unable to find a toolkit
-                # directory is an error.
+                # User explicitly requested CUDA support; being unable to find a
+                # toolkit directory is an error.
                 echo "$as_me:$LINENO: result: not found" >&5
 echo "${ECHO_T}not found" >&6
                 { { echo "$as_me:$LINENO: error: \
@@ -5530,6 +5536,9 @@ fi
 
 
 
+
+           # include CUDA detection script
+##################### END CUDA #####################
 
 
                     ac_config_files="$ac_config_files Makefile ../utility/structures/Makefile"
