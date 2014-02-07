@@ -8,12 +8,16 @@
 #ifdef CUDA_USE_CUDAMALLOCHOST
 # ifdef CUDA_MEMPOOL
 #  define CUDA_MALLOC(ptr,sz) ptr = hapi_poolMalloc(size)
+#  define CUDA_FREE(ptr) hapi_poolFree(ptr)
 # else
 #  define CUDA_MALLOC(ptr,sz) cudaMallocHost(&(ptr), size)
+#  define CUDA_FREE(ptr) delayedFree(ptr)
 # endif
 #else
 # define CUDA_MALLOC(ptr,sz) ptr = malloc(sz)
+# define CUDA_FREE(ptr) free(ptr)
 #endif
+
 
 #define THREADS_PER_BLOCK 128
 
