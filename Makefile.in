@@ -107,7 +107,11 @@ ifdef CUDA_LEVEL
 # compute capabilities -- are encouraged to read the nVidia CUDA Compiler
 # documentation starting at this link:
 # <http://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html#virtual-architecture-feature-list>
-NVCC_FLAGS += -arch=compute_$(CUDA_LEVEL) -code=sm_$(CUDA_LEVEL)
+#
+# N.B. by specifying a *virtual* architecture ("compute_...") for `-code=`
+# we're requesting just-in-time compilation for the binary code; this ensures
+# that we'll be able to run on later GPU hardware architectures as well.
+NVCC_FLAGS += -arch=compute_$(CUDA_LEVEL) -code=compute_$(CUDA_LEVEL)
 endif
 
 NVCC_INC = -I$(CUDA_DIR)/include -I$(NVIDIA_CUDA_SDK)/common/inc -I$(CHARM_PATH)/tmp/hybridAPI -I$(CHARM_PATH)/src/arch/cuda/hybridAPI
